@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora Vinil — El Taller</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swapdisplay=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent: #f0c040;
+    --accent2: #e07830;
+    --text: #f0ede8;
+    --muted: #888;
+    --green: #5dca8a;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo-dot {
+    width: 38px;
+    height: 38px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-dot svg { width: 22px; height: 22px; }
+
+  .header-text h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .header-text p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .main { padding: 20px 16px; max-width: 480px; margin: 0 auto; }
+
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .pill:active { transform: scale(0.97); }
+
+  .pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0f0f0f;
+    font-weight: 500;
+  }
+
+  .pill.active-orange {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .input-group label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .input-group input[type="number"] {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--text);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .input-group input[type="number"]:focus {
+    border-color: var(--accent);
+  }
+
+  .input-group input[type="number"]::-webkit-inner-spin-button,
+  .input-group input[type="number"]::-webkit-outer-spin-button { opacity: 0.4; }
+
+  .margen-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .margen-label {
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 52px;
+    letter-spacing: 0.5px;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--border);
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: 3px solid var(--bg);
+  }
+
+  .margen-val {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--accent);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  .result-hero {
+    background: linear-gradient(135deg, #1a1a0f 0%, #1a1200 100%);
+    border: 1px solid #3a3000;
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .result-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #888860;
+    margin-bottom: 8px;
+  }
+
+  .result-price {
+    font-family: 'Poppins', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+
+  .result-price span {
+    font-size: 22px;
+    letter-spacing: 0;
+    opacity: 0.7;
+    margin-left: 4px;
+  }
+
+  .result-formula {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #888860;
+    line-height: 1.5;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .stat-val {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  .stat-val.green { color: var(--green); }
+
+  .warning-pill {
+    background: #2a1800;
+    border: 1px solid #5a3000;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #e08030;
+    margin-top: 8px;
+    display: none;
+  }
+
+  .warning-pill.show { display: block; }
+
+  .whatsapp-btn {
+    width: 100%;
+    background: #25d366;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: opacity 0.15s;
+    margin-top: 4px;
+  }
+
+  .whatsapp-btn:active { opacity: 0.85; }
+
+  .whatsapp-btn svg { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-dot">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2.2" stroke-linecap="round">
+      <rect x="3" y="3" width="18" height="18" rx="3"/>
+      <path d="M3 9h18M9 21V9"/>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>El Taller — Vinil</h1>
+    <p>Calculadora de precios para cotizar</p>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- TIPO VINIL -->
+  <div class="section">
+    <p class="section-title">Tipo de vinil</p>
+    <div class="pill-group">
+      <button class="pill active" id="btn-opaco" onclick="setTipo('opaco')">Opaco / mate</button>
+      <button class="pill" id="btn-brillante" onclick="setTipo('brillante')">Brillante</button>
+    </div>
+  </div>
+
+  <!-- VOLUMEN -->
+  <div class="section">
+    <p class="section-title">Precio del rollo (según cantidad que compras)</p>
+    <div class="pill-group">
+      <button class="pill active" id="vol-menudeo" onclick="setVol('menudeo',55)">Menudeo · $55/mt</button>
+      <button class="pill" id="vol-mayoreo" onclick="setVol('mayoreo',49.30)">Mayoreo · $49.30/mt</button>
+      <button class="pill" id="vol-emprendedor" onclick="setVol('emprendedor',47.60)">Emprendedor · $47.60/mt</button>
+    </div>
+  </div>
+
+  <!-- MEDIDAS -->
+  <div class="section">
+    <p class="section-title">Medidas del trabajo</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label>ANCHO (cm)</label>
+        <input type="number" id="ancho" value="60" min="1" max="500" inputmode="numeric" oninput="calcular()">
+      </div>
+      <div class="input-group">
+        <label>ALTO (cm)</label>
+        <input type="number" id="alto" value="60" min="1" max="500" inputmode="numeric" oninput="calcular()">
+      </div>
+    </div>
+    <div class="margen-row">
+      <span class="margen-label">MARGEN</span>
+      <input type="range" id="margen" min="2" max="4" step="0.5" value="3" oninput="document.getElementById('mval').textContent='x'+this.value;calcular()">
+      <span class="margen-val" id="mval">x3</span>
+    </div>
+  </div>
+
+  <!-- INSTALACION -->
+  <div class="section">
+    <p class="section-title">Instalación</p>
+    <div class="pill-group">
+      <button class="pill active" id="inst-no" onclick="setInst('no')">Sin instalación</button>
+      <button class="pill" id="inst-normal" onclick="setInst('normal')">Con instalación · $150</button>
+      <button class="pill" id="inst-compleja" onclick="setInst('compleja')">Grande / compleja · $250</button>
+    </div>
+    <div class="warning-pill" id="warning-inst">
+      ⚠ El trabajo es grande — considera cobrar instalación compleja ($250)
+    </div>
+  </div>
+
+  <!-- RESULTADO HERO -->
+  <div class="result-hero">
+    <p class="result-label">Precio al cliente</p>
+    <div class="result-price" id="precio-hero">—<span>MXN</span></div>
+    <p class="result-formula" id="formula-txt"></p>
+  </div>
+
+  <!-- STATS -->
+  <div class="result-grid">
+    <div class="stat-card">
+      <p class="stat-label">Costo material</p>
+      <p class="stat-val" id="stat-mat">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Instalación</p>
+      <p class="stat-val" id="stat-inst">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Tu ganancia</p>
+      <p class="stat-val green" id="stat-gan">—</p>
+    </div>
+  </div>
+
+  <!-- WHATSAPP -->
+  <button class="whatsapp-btn" onclick="copiarMensaje()">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    Copiar mensaje para WhatsApp
+  </button>
+
+</div>
+
+<script>
+var precioMt = 55;
+var modoInst = 'no';
+
+function setTipo(t) {
+  document.getElementById('btn-opaco').className = 'pill' + (t==='opaco' ? ' active' : '');
+  document.getElementById('btn-brillante').className = 'pill' + (t==='brillante' ? ' active' : '');
+  calcular();
+}
+
+function setVol(v, p) {
+  precioMt = p;
+  ['menudeo','mayoreo','emprendedor'].forEach(function(x) {
+    document.getElementById('vol-'+x).className = 'pill';
+  });
+  document.getElementById('vol-'+v).className = 'pill active';
+  calcular();
+}
+
+function setInst(v) {
+  modoInst = v;
+  document.getElementById('inst-no').className = 'pill' + (v==='no' ? ' active' : '');
+  document.getElementById('inst-normal').className = 'pill' + (v==='normal' ? ' active' : '');
+  document.getElementById('inst-compleja').className = 'pill' + (v==='compleja' ? ' active' : '');
+  calcular();
+}
+
+function calcular() {
+  var ancho = parseFloat(document.getElementById('ancho').value) || 0;
+  var alto = parseFloat(document.getElementById('alto').value) || 0;
+  var margen = parseFloat(document.getElementById('margen').value);
+  var area = ancho * alto;
+
+  var costoCm2 = precioMt / (60 * 100);
+  var costoMat = area * costoCm2 * 1.15;
+
+  var costoInst = 0;
+  if (modoInst === 'normal') costoInst = 150;
+  else if (modoInst === 'compleja') costoInst = 250;
+
+  var precioFinal = (costoMat * margen) + costoInst;
+  var ganancia = precioFinal - costoMat - costoInst;
+
+  var warn = document.getElementById('warning-inst');
+  warn.className = (modoInst === 'normal' && area > 8100) ? 'warning-pill show' : 'warning-pill';
+
+  document.getElementById('precio-hero').innerHTML = Math.round(precioFinal).toLocaleString('es-MX') + '<span>MXN</span>';
+
+  var instTexto = costoInst > 0 ? ' + $' + costoInst + ' instalación' : '';
+  document.getElementById('formula-txt').textContent =
+    '($' + costoMat.toFixed(2) + ' material × ' + margen + ')' + instTexto;
+
+  document.getElementById('stat-mat').textContent = '$' + costoMat.toFixed(2);
+  document.getElementById('stat-inst').textContent = costoInst > 0 ? '$' + costoInst : '—';
+  document.getElementById('stat-gan').textContent = '$' + Math.round(ganancia).toLocaleString('es-MX');
+}
+
+function copiarMensaje() {
+  var ancho = parseFloat(document.getElementById('ancho').value) || 0;
+  var alto = parseFloat(document.getElementById('alto').value) || 0;
+  var margen = parseFloat(document.getElementById('margen').value);
+  var area = ancho * alto;
+  var costoCm2 = precioMt / (60 * 100);
+  var costoMat = area * costoCm2 * 1.15;
+  var costoInst = 0;
+  var instTexto = '';
+  if (modoInst === 'normal') { costoInst = 150; instTexto = '\n🔧 Instalación: $150'; }
+  else if (modoInst === 'compleja') { costoInst = 250; instTexto = '\n🔧 Instalación (trabajo grande): $250'; }
+  var precioFinal = (costoMat * margen) + costoInst;
+  var tipo = document.getElementById('btn-opaco').classList.contains('active') ? 'Opaco/mate' : 'Brillante';
+
+  var msg = '¡Hola! 👋 Con gusto le cotizamos:\n\n'
+    + '🏷 Vinil adhesivo ' + tipo + '\n'
+    + '📐 Medidas: ' + ancho + ' × ' + alto + ' cm\n'
+    + instTexto + '\n\n'
+    + '💵 *Total: $' + Math.round(precioFinal).toLocaleString('es-MX') + ' MXN*\n\n'
+    + 'Pregunta por existencias de colores. ¡Estamos en Huixtla! 📍';
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(msg).then(function() {
+      var btn = document.querySelector('.whatsapp-btn');
+      btn.style.background = '#1a9e4e';
+      btn.textContent = '✓ ¡Copiado! Pégalo en WhatsApp';
+      setTimeout(function() {
+        btn.style.background = '#25d366';
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Copiar mensaje para WhatsApp';
+      }, 2500);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = msg;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('¡Copiado! Pégalo en WhatsApp.');
+  }
+}
+
+calcular();
+</script>
+</body>
+</html>
